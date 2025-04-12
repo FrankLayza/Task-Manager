@@ -13,6 +13,7 @@ const Form = ({ toggleTheme, toggle }) => {
   };
 
   const addTask = () => {
+    if(!input.trim()) return;
     const newTodo = { id: Date.now(), text: input, completed: false };
     const updatedTodo = [newTodo, ...todoList];
     setTodo(updatedTodo);
@@ -27,23 +28,27 @@ const Form = ({ toggleTheme, toggle }) => {
     setVisible(updated);
     setCount(count - 1);
   };
-  
+
   const toggleCompleted = (id) => {
-    const updated = (
-      todoList.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+    const updated = todoList.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
-    setTodo(updated)
-    setVisible(updated)
+    setTodo(updated);
+    setVisible(updated);
   };
 
   const activeTask = () => {
     setVisible(todoList.filter((todo) => !todo.completed));
   };
-  
+
   const filterCompleted = () => {
     setVisible(todoList.filter((todo) => todo.completed));
+  };
+
+  const clearCompleted = () => {
+    const clearCompletedTask = todoList.filter((todo) => !todo.completed);
+    setTodo(clearCompletedTask);
+    setVisible(clearCompletedTask);
   };
 
   useEffect(() => {
@@ -64,7 +69,7 @@ const Form = ({ toggleTheme, toggle }) => {
         </div>
 
         <div
-          className={`flex ${toggle ? "bg-white" : "bg-dark-300"}  w-full p-3`}
+          className={`flex ${toggle ? "bg-lightGrayishBlue" : "bg-dark-300"}  w-full p-3`}
         >
           <label className="inline-flex items-center cursor-pointer mx-2">
             <input type="checkbox" className="sr-only peer" />
@@ -99,7 +104,7 @@ const Form = ({ toggleTheme, toggle }) => {
             <div
               key={todo.id}
               className={`flex ${
-                toggle ? "bg-white" : "bg-dark-300"
+                toggle ? "bg-lightGrayishBlue shadow-gray-400" : "bg-dark-300"
               } w-full p-3`}
             >
               <label className="inline-flex items-center cursor-pointer mx-2">
@@ -125,7 +130,7 @@ const Form = ({ toggleTheme, toggle }) => {
           ))}
           <div
             className={`flex justify-between text-[10px] overflow-hidden w-full ${
-              toggle ? "bg-white text-black" : "bg-dark-300 text-gray-400"
+              toggle ? "bg-lightGrayishBlue text-black shadow-lg" : "bg-dark-300 text-gray-400"
             } p-3`}
           >
             <div>{count} items left</div>
@@ -141,7 +146,9 @@ const Form = ({ toggleTheme, toggle }) => {
               </button>
             </div>
             <div>
-              <p>Clear Completed</p>
+              <button className="cursor-pointer" onClick={clearCompleted}>
+                Clear Completed
+              </button>
             </div>
           </div>
         </div>
