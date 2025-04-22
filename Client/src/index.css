@@ -1,0 +1,15 @@
+@import "tailwindcss";  
+
+@theme{
+    --color-dark-500: hsl(235, 21%, 11%);
+    --color-dark-300: hsl(235, 24%, 19%);
+    --color-grayishBlue: hsl(234, 39%, 85%);
+    --color-darkGrayishBlue: hsl(235, 19%, 35%);
+    --color-gradientBlue: hsl(192, 100%, 67%);
+    --color-gradientPurple: hsl(280, 87%, 65%);
+    --color-lightGrayishBlue: hsl(236, 33%, 92%);
+}
+/* .form{
+    background-color: hsl(235, 21%, 11%);
+    transition: background-color 0.3s ease;
+} */
