@@ -63,7 +63,7 @@ const SignIn = () => {
 
           <button
             onClick={() => {
-              navigate("/");
+              navigate("/form");
             }}
             type="button"
             className="w-full my-4 p-2 rounded-2xl bg-gray-300 text-sm text-white font-bold cursor-pointer hover:bg-gray-800 "

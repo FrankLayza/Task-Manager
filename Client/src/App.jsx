@@ -14,18 +14,19 @@ function App() {
   };
 
   useEffect(() => {
-    if (location.pathname === "/") {
+    if (location.pathname === "/form") {
       document.body.style.backgroundColor = toggle
         ? "hsl(0, 0%, 98%)"
         : "hsl(235, 21%, 11%)";
     } else {
-      document.body.style.backgroundColor = "none";
+      document.body.style.backgroundColor = "transparent";
+      document.body.style.backgroundImage = "none"
     }
   }, [location.pathname, toggle]);
   return (
     <Routes>
       <Route
-        path="/"
+        path="/form"
         element={
           <div
             className="form flex justify-center items-center flex-col bg-cover bg-center h-[40vh]"
@@ -36,7 +37,7 @@ function App() {
         }
       />
       <Route
-        path="/form"
+        path="/"
         element={
           <div
             className="flex justify-center items-center flex-col bg-center bg-cover min-h-screen w-full h-full"
