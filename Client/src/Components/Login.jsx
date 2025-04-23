@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {toast} from 'react-toastify';
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -17,8 +18,9 @@ const LogIn = () => {
     try {
       console.log("Submitting form data:", formData);
       const res = await axios.post("http://localhost:5000/api/login", formData);
+      toast.success('Logged in successfully')
       console.log(res.data);
-      navigate("/");
+      navigate("/form");
     } catch (error) {
       console.log(error.response?.data);
     }
