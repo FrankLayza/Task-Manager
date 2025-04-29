@@ -1,8 +1,10 @@
 // import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {toast} from 'react-toastify';
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -18,8 +20,11 @@ const LogIn = () => {
     try {
       console.log("Submitting form data:", formData);
       const res = await axios.post("http://localhost:5000/api/login", formData);
-      toast.success('Logged in successfully')
+      toast.success("Logged in successfully");
       console.log(res.data);
+      const token = res.data.token;
+      console.log("token saved", token);
+      localStorage.setItem("token", token);
       navigate("/form");
     } catch (error) {
       console.log(error.response?.data);
@@ -34,15 +39,31 @@ const LogIn = () => {
           <h2 className="md:text-xl">Log In</h2>
           <p className="text-[14px] md:text-[11px] mb-2">
             Don't have an account?{" "}
-            <a className="underline" href="">
-              Sign Up
-            </a>{" "}
+            <Link className="underline" to={"/"}>
+              Sign up
+            </Link>
           </p>
-          <div className="rounded-4xl border border-gray-500 w-full p-5 h-4 mt-3 flex items-center justify-center text-[14px]">
-            <p>Login with Facebook</p>
+          <div className="rounded-4xl cursor-pointer border border-gray-500 w-full p-5 h-4 mt-3 flex items-center justify-center text-[14px]">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              whileFocus={{ scale: 1.05 }}
+              className="flex items-center cursor-pointer"
+            >
+              <FaFacebook className="mx-2 text-blue-500" />
+              <p>Login with Facebook</p>
+            </motion.button>
           </div>
-          <div className="rounded-4xl border border-gray-500 w-full p-5 h-4 my-3 flex items-center justify-center text-[14px]">
-            <p>Login with Google</p>
+          <div className="rounded-4xl cursor-pointer border border-gray-500 w-full p-5 h-4 my-3 flex items-center justify-center text-[14px]">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              whileFocus={{ scale: 1.05 }}
+              className="flex items-center cursor-pointer"
+            >
+              <FaGoogle className="mx-2 text-red-400" />
+              <p>Login with Google</p>
+            </motion.button>
           </div>
 
           <div>
@@ -84,13 +105,20 @@ const LogIn = () => {
                 Forget Password
               </a>
             </span>
-
-            <button
+            <motion.button
+              initial={{ backgroundSize: "0% 100%" }}
+              whileHover={{ backgroundSize: "100% 100%" }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              style={{
+                backgroundPosition: "left bottom",
+                backgroundRepeat: "no-repeat",
+                backgroundImage: "linear-gradient(to right, #1f2937, #1f2937)",
+              }}
               type="submit"
-              className="w-full my-4 p-2 rounded-2xl bg-gray-300 text-sm text-white font-bold cursor-pointer hover:bg-gray-800 "
+              className="w-full my-4 p-2 rounded-2xl bg-gray-300 text-sm text-white font-bold cursor-pointer"
             >
               Log In
-            </button>
+            </motion.button>
           </form>
         </div>
       </div>

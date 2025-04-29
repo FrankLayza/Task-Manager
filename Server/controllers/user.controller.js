@@ -9,25 +9,39 @@ export const createUser = async (req, res) => {
   if (!email || !password) {
     return res
       .status(400)
-      .json({ success: false, message: "Wrong email and password" });
+      .json({ success: false, message: "Email and password are required" });
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ email, password: hashedPassword });
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res
-      .status(401)
-      .json({ success: false, message: "user already exists" });
-  }
+
   try {
-    await newUser.save();
-    res
-      .status(201)
-      .json({ success: true, message: "added new user", data: newUser });
-    console.log("request body", req.body);
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(401)
+        .json({ success: false, message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({ email, password: hashedPassword });
+
+    const token = jwt.sign(
+      { _id: newUser._id, email: newUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: {
+        _id: newUser._id,
+        email: newUser.email,
+      },
+      token: token,
+    });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ success: false, message: "connection error" });
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -79,30 +93,42 @@ export const loginUser = async (req, res) => {
   if (!email || !password) {
     return res
       .status(400)
-      .json({ success: false, message: "Email and Password are required" });
+      .json({ success: false, message: "Email and password are required" });
   }
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: "incorrect Email" });
+        .json({ success: false, message: "Incorrect email" });
     }
 
-    const isTheSame = await bcrypt.compare(password, user.password);
-    if (!isTheSame) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res
         .status(400)
-        .json({ success: false, message: "mismatched password" });
+        .json({ success: false, message: "Incorrect password" });
     }
 
-    const tokens = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1hr",
+    const token = jwt.sign(
+      { _id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: {
+        _id: user._id,
+        email: user.email,
+      },
+      token: token,
     });
-    return res.status(200).json({ success: true, tokens });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 

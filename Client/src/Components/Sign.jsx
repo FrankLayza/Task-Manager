@@ -37,10 +37,10 @@ const SignIn = () => {
               Log In
             </Link>
           </p>
-          <div className="rounded-4xl border border-gray-500 w-full p-5 h-4 mt-3 flex items-center justify-center text-[14px]">
+          <div className="rounded-4xl cursor-pointer border border-gray-500 w-full p-5 h-4 mt-3 flex items-center justify-center text-[14px]">
             <p>Continue with Facebook</p>
           </div>
-          <div className="rounded-4xl border border-gray-500 w-full p-5 h-4 my-3 flex items-center justify-center text-[14px]">
+          <div className="rounded-4xl cursor-pointer border border-gray-500 w-full p-5 h-4 my-3 flex items-center justify-center text-[14px]">
             <p>Continue with Google</p>
           </div>
 
