@@ -47,11 +47,23 @@ const Form = ({ toggleTheme, toggle }) => {
     }
   };
 
-  const removeTask = (id) => {
-    const updated = todoList.filter((todo) => todo._id !== id);
-    setTodo(updated);
-    setVisible(updated);
-    setCount(count - 1);
+  const removeTask = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:5000/api/tasks/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const updated = todoList.filter((todo) => todo._id !== id);
+      setTodo(updated);
+      setVisible(updated);
+      setCount(updated.filter((todo) => !todo.completed.length));
+      toast.success("Task removed");
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Error removing the task");
+    }
   };
 
   const toggleCompleted = (id) => {
@@ -94,7 +106,7 @@ const Form = ({ toggleTheme, toggle }) => {
         setVisible(data.tasks || []);
         setCount((data.tasks || []).filter((task) => !task.completed).length);
       } catch (error) {
-        console.error(error.response?.data || error.message)
+        console.error(error.response?.data || error.message);
         if (error.response && error.response.status === 401) {
           toast.error("Session expired. Please log in again");
           localStorage.removeItem("token");

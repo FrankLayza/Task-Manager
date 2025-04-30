@@ -17,13 +17,10 @@ const LogIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      console.log("Submitting form data:", formData);
+    try { 
       const res = await axios.post("http://localhost:5000/api/login", formData);
-      toast.success("Logged in successfully");
-      console.log(res.data);
-      const token = res.data.token;
-      console.log("token saved", token);
+      toast.success("Logged in successfully"); 
+      const token = res.data.token; 
       localStorage.setItem("token", token);
       navigate("/form");
     } catch (error) {
